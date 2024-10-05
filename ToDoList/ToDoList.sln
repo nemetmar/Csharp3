@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4CE7AFE4-890F-4153-965A-0556567B0745}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{509A82CE-05BA-41D3-891D-3982853828D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoList.WebApi", "src\ToDoList.WebApi\ToDoList.WebApi.csproj", "{0C45958A-61ED-4EEB-B7A3-C84856CF218F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoList.WebApi", "src\ToDoList.WebApi\ToDoList.WebApi.csproj", "{0ADB049A-84BA-4A3C-831D-21B75D8C0F52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,12 +16,12 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0C45958A-61ED-4EEB-B7A3-C84856CF218F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C45958A-61ED-4EEB-B7A3-C84856CF218F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C45958A-61ED-4EEB-B7A3-C84856CF218F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C45958A-61ED-4EEB-B7A3-C84856CF218F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ADB049A-84BA-4A3C-831D-21B75D8C0F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ADB049A-84BA-4A3C-831D-21B75D8C0F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ADB049A-84BA-4A3C-831D-21B75D8C0F52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ADB049A-84BA-4A3C-831D-21B75D8C0F52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0C45958A-61ED-4EEB-B7A3-C84856CF218F} = {4CE7AFE4-890F-4153-965A-0556567B0745}
+		{0ADB049A-84BA-4A3C-831D-21B75D8C0F52} = {509A82CE-05BA-41D3-891D-3982853828D6}
 	EndGlobalSection
 EndGlobal
