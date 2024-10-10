@@ -12,7 +12,7 @@ public class GreedGame
     // S .NET 8 prisla collection initialization a int[], ale napriklad aj List<int> je mozne napisat aj sposobom nizsie.
     // V projekte v praci sme nedavno na .NET 8 presli a osobne to rada pouzivam
     private readonly int[] tripletPoints = [1000, 200, 300, 400, 500, 600]; // pekne pouzitie readonly, chvalim :)
-    private readonly int[] singlePoints = new int[] { 100, 0, 0, 0, 50, 0 };
+    private readonly int[] singlePoints = [100, 0, 0, 0, 50, 0];
 
     public void ThrowDice(int numberOfDice)
     {
