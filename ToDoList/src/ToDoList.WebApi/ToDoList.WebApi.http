@@ -1,6 +1,45 @@
-@ToDoList.WebApi_HostAddress = http://localhost:5267
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@host=http://localhost
+@port=5000
 
-GET {{ToDoList.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
+
+//List all ToDoItems
+GET {{host}}:{{port}}/api/ToDoItems
 
 ###
+
+//Get specific ToDoItem by id
+@itemToGetId = 3
+GET {{host}}:{{port}}/api/ToDoItems/{{itemToGetId}}
+
+###
+
+//Add new ToDoItem
+POST {{host}}:{{port}}/api/ToDoItems
+Content-Type: application/json
+
+{
+  "name": "Example New Task",
+  "description": "Example New Description",
+  "isCompleted": false
+}
+
+###
+
+//Update existing ToDoItem by id
+@itemToUpdateId = 4
+
+PUT {{host}}:{{port}}/api/ToDoItems/{{itemToUpdateId}}
+Content-Type: application/json
+
+{
+  "name": "Blobloblo",
+  "description": "Updated Description",
+  "isCompleted": false
+}
+
+###
+
+//Delete exisiting ToDoItem by id
+@itemToDeleteId = 3
+DELETE {{host}}:{{port}}/api/ToDoItems/{{itemToDeleteId}}

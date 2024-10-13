@@ -28,7 +28,7 @@ public class ToDoItemsController : ControllerBase
         {
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
-        return CreatedAtAction("Create", item);
+        return CreatedAtAction("Create", ToDoItemGetResponseDto.FromDomain(item));
     }
 
     [HttpGet]
@@ -37,7 +37,12 @@ public class ToDoItemsController : ControllerBase
         try
         {
             if (items.Count == 0) throw new Exception("Nic tu není.");
-            return Ok(items);
+            var dtoItems = new List<ToDoItemGetResponseDto>();
+            foreach(ToDoItem obj in items)
+            {
+                dtoItems.Add(ToDoItemGetResponseDto.FromDomain(obj));
+            }
+            return Ok(dtoItems);
         }
         catch(Exception ex)
         {
@@ -58,7 +63,7 @@ public class ToDoItemsController : ControllerBase
                 itemNotFound = true;
                 throw new Exception("Položka neexistuje.");
             }
-            return Ok(item);
+            return Ok(ToDoItemGetResponseDto.FromDomain(item));
         }
         catch(Exception ex)
         {
@@ -70,7 +75,9 @@ public class ToDoItemsController : ControllerBase
     [HttpPut("{toDoItemId:int}")]
     public IActionResult UpdateById(int toDoItemId, [FromBody] ToDoItemUpdateRequestDto request)
     {
+        bool itemNotFound = false;
         var item = request.ToDomain();
+        item.ToDoItemId = toDoItemId;
         try
         {
             var obj = items.FirstOrDefault(i => i.ToDoItemId == toDoItemId);
@@ -80,18 +87,24 @@ public class ToDoItemsController : ControllerBase
                 obj.Description = item.Description;
                 obj.IsCompleted = item.IsCompleted;
             }
-            else throw new Exception("Položka nenalezena.");
+            else
+            {
+                itemNotFound = true;
+                throw new Exception("Položka nenalezena.");
+            }
         }
         catch(Exception ex)
         {
+            if (itemNotFound)  return Problem(ex.Message, null, StatusCodes.Status404NotFound);
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
-        return CreatedAtAction("Update", item);
+        return CreatedAtAction("Create", ToDoItemGetResponseDto.FromDomain(item));
     }
 
     [HttpDelete("{toDoItemId:int}")]
     public IActionResult DeleteById(int toDoItemId)
     {
+        bool itemNotFound = false;
         try
         {
             var obj = items.FirstOrDefault(i => i.ToDoItemId == toDoItemId);
@@ -99,10 +112,15 @@ public class ToDoItemsController : ControllerBase
             {
                 items.Remove(obj);
             }
-            else throw new Exception("Položka nenalezena.");
+            else
+            {
+                itemNotFound = true;
+                throw new Exception("Položka nenalezena.");
+            }
         }
         catch(Exception ex)
         {
+            if (itemNotFound)  return Problem(ex.Message, null, StatusCodes.Status404NotFound);
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
         return Ok();
