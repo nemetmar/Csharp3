@@ -33,7 +33,7 @@ PUT {{host}}:{{port}}/api/ToDoItems/{{itemToUpdateId}}
 Content-Type: application/json
 
 {
-  "name": "Blobloblo11111",
+  "name": "Blobloblo211111",
   "description": "Updated Description",
   "isCompleted": false
 }

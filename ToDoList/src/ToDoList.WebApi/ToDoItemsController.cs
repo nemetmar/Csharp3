@@ -80,12 +80,10 @@ public class ToDoItemsController : ControllerBase
         item.ToDoItemId = toDoItemId;
         try
         {
-            var obj = items.Find(i => i.ToDoItemId == toDoItemId);
-            if (obj != null)
+            var index = items.FindIndex(i => i.ToDoItemId == toDoItemId);
+            if (index != -1)
             {
-                obj.Name = item.Name;
-                obj.Description = item.Description;
-                obj.IsCompleted = item.IsCompleted;
+                items[index] = item;
             }
             else
             {
