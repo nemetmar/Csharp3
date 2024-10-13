@@ -57,7 +57,7 @@ public class ToDoItemsController : ControllerBase
         bool itemNotFound = false;
         try
         {
-            var item = items.FirstOrDefault(i => i.ToDoItemId == toDoItemId);
+            var item = items.Find(i => i.ToDoItemId == toDoItemId);
             if (item == null)
             {
                 itemNotFound = true;
@@ -80,7 +80,7 @@ public class ToDoItemsController : ControllerBase
         item.ToDoItemId = toDoItemId;
         try
         {
-            var obj = items.FirstOrDefault(i => i.ToDoItemId == toDoItemId);
+            var obj = items.Find(i => i.ToDoItemId == toDoItemId);
             if (obj != null)
             {
                 obj.Name = item.Name;
@@ -107,7 +107,7 @@ public class ToDoItemsController : ControllerBase
         bool itemNotFound = false;
         try
         {
-            var obj = items.FirstOrDefault(i => i.ToDoItemId == toDoItemId);
+            var obj = items.Find(i => i.ToDoItemId == toDoItemId);
             if (obj != null)
             {
                 items.Remove(obj);
