@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Hangman;
 
-HangmanGame game = new HangmanGame(10, "tyrannosaurus");
+HangmanGame game = new HangmanGame(10, "kočička");
 
 Output.DisplayWelcome();
 

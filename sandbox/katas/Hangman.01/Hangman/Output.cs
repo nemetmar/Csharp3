@@ -28,7 +28,7 @@ public static class Output
 
     public static void DisplayWonStatus(HangmanGame game)
     {
-        Console.WriteLine("Gratuluji!");
+        Console.WriteLine("Gratuluji k výhře!");
         Console.WriteLine("Správná odpověď: " + game.SecretWord);
     }
 
