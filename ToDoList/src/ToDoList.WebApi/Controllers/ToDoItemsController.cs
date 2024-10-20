@@ -13,7 +13,7 @@ namespace ToDoList.WebApi;
 [Route("api/[controller]")]
 public class ToDoItemsController : ControllerBase
 {
-    private static List<ToDoItem> items = [];
+    public static List<ToDoItem> items = [];
 
     [HttpPost]
     public IActionResult Create(ToDoItemCreateRequestDto request)
@@ -32,7 +32,7 @@ public class ToDoItemsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult Read()
+    public ActionResult<IEnumerable<ToDoItemGetResponseDto>> Read()
     {
         try
         {
@@ -46,7 +46,7 @@ public class ToDoItemsController : ControllerBase
         }
         catch(Exception ex)
         {
-            if (items.Count == 0)  return Problem(ex.Message, null, StatusCodes.Status404NotFound);
+            if (items.Count == 0)  return NotFound();
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
     }
@@ -67,7 +67,7 @@ public class ToDoItemsController : ControllerBase
         }
         catch(Exception ex)
         {
-            if (itemNotFound)  return Problem(ex.Message, null, StatusCodes.Status404NotFound);
+            if (itemNotFound) return NotFound();
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
     }
@@ -93,7 +93,7 @@ public class ToDoItemsController : ControllerBase
         }
         catch(Exception ex)
         {
-            if (itemNotFound)  return Problem(ex.Message, null, StatusCodes.Status404NotFound);
+            if (itemNotFound)  return NotFound();
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
         return CreatedAtAction("Create", ToDoItemGetResponseDto.FromDomain(item));
@@ -118,7 +118,7 @@ public class ToDoItemsController : ControllerBase
         }
         catch(Exception ex)
         {
-            if (itemNotFound)  return Problem(ex.Message, null, StatusCodes.Status404NotFound);
+            if (itemNotFound)  return NotFound();
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
         return Ok();
