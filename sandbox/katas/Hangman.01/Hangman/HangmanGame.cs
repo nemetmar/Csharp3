@@ -14,15 +14,16 @@ public class HangmanGame
     public string SecretWord { get; private set; }
 
 
-
-    public HangmanGame(int maxNumberOfGuesses, string SecretWord)
+    // premenovala som ti nazov parametru, aby bol v camelCase (v PascalCase byvaju iba nazvy properties). Tym padom nemusime pouzivat this lebo uz sa parameter nevola rovnako ako property
+    public HangmanGame(int maxNumberOfGuesses, string secretWord)
     {
         CurrentState = GameState.Running;
         Guesses = new List<Guess>();
+        // MaxNumberOfBadGuesses by mohla byt nejaka konstanta skor, a nie ako parameter
         MaxNumberOfBadGuesses = maxNumberOfGuesses;
-        this.SecretWord = SecretWord.ToUpper();
-        guessedChars = new char[this.SecretWord.Length];
-        for (int i = 0; i < this.SecretWord.Length; i++)
+        SecretWord = secretWord.ToUpper();
+        guessedChars = new char[SecretWord.Length];
+        for (int i = 0; i < SecretWord.Length; i++)
         {
             guessedChars[i] = '_';
         }
@@ -34,6 +35,9 @@ public class HangmanGame
         {
             case GameState.Running:
                 Output.DisplayCurrentGuessState(this);
+                // zvazit moznost vracat rovno jeden char z ReadUniqueAToZLetter nez string, a potom v metodach nemusiet sa dotazovat na jedno pismeno cez letter[0]
+                // EvaluateGuess a RefreshGuessWord by mohli brat ako parameter char namiesto string
+                // aj trieda Guess by si mohla drzat iba char
                 string letter = Input.ReadUniqueAToZLetter(Guesses, "Zadej písmeno: ");
                 Guesses.Add(new Guess(letter, EvaluateGuess(letter)));
                 Output.DisplayResult(this);
@@ -89,6 +93,7 @@ public class HangmanGame
         {
             CurrentState = GameState.Finished;
         }
+        // Nedalo by sa tu rovno pouzit guessedChars? Pristup k tomu mame a ReturnGuessWord uz nikde mimo triedu nepouzivas, takze nie je ho potreba
         else if (ReturnGuessWord().Equals(SecretWord))
         {
             CurrentState = GameState.Won;
