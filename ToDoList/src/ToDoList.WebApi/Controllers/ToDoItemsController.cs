@@ -36,17 +36,19 @@ public class ToDoItemsController : ControllerBase
     {
         try
         {
-            if (items.Count == 0) throw new Exception("Nic tu není.");
+            if (items.Count == 0)
+                throw new Exception("Nic tu není.");
             var dtoItems = new List<ToDoItemGetResponseDto>();
-            foreach(ToDoItem obj in items)
+            foreach (ToDoItem obj in items)
             {
                 dtoItems.Add(ToDoItemGetResponseDto.FromDomain(obj));
             }
             return Ok(dtoItems);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            if (items.Count == 0)  return NotFound();
+            if (items.Count == 0)
+                return NotFound();
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
     }
@@ -65,9 +67,10 @@ public class ToDoItemsController : ControllerBase
             }
             return Ok(ToDoItemGetResponseDto.FromDomain(item));
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            if (itemNotFound) return NotFound();
+            if (itemNotFound)
+                return NotFound();
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
     }
@@ -91,9 +94,10 @@ public class ToDoItemsController : ControllerBase
                 throw new Exception("Položka nenalezena.");
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            if (itemNotFound)  return NotFound();
+            if (itemNotFound)
+                return NotFound();
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
         return CreatedAtAction("Create", ToDoItemGetResponseDto.FromDomain(item));
@@ -116,9 +120,10 @@ public class ToDoItemsController : ControllerBase
                 throw new Exception("Položka nenalezena.");
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            if (itemNotFound)  return NotFound();
+            if (itemNotFound)
+                return NotFound();
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
         return Ok();
