@@ -5,9 +5,11 @@ using ToDoList.Domain.Models;
 using ToDoList.WebApi;
 using ToDoList.Domain.DTOs;
 
+[Collection("Tests")]
 public class PutTests
 {
     [Fact]
+    // tu si sa asi prepsala a mas tu dvakrat item v nazvu :)
     public void Put_ItemItemById_UpdatesItemById()
     {
         // Arrange
@@ -25,6 +27,10 @@ public class PutTests
 
         //Act
         var result = controller.UpdateById(toDoItem.ToDoItemId, item);
+        /*
+        Pozor, PUT potom nebude vracat CreatedAtAction (ked testy opravime a pridame tam mocky), takze ti pravdepodobne tento test bude padat
+        Nezabudni si to opravit na to, ze testujes NoContent + zaroven uz nebudes mat response, takze cast, kde value porovnavas s item uz tiez nebude validna
+        */
         var resultResult = result as CreatedAtActionResult;
         var value = resultResult.Value as ToDoItemGetResponseDto;
 
