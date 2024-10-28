@@ -5,9 +5,11 @@ using ToDoList.Domain.Models;
 using ToDoList.WebApi;
 using ToDoList.Domain.DTOs;
 
+[Collection("Tests")]
 public class DeleteTests
 {
     [Fact]
+    // tu si sa asi tiez prepsala a mas dvakrat item v nazve :)
     public void Delete_ItemItemById_DeletesItemById()
     {
         // Arrange

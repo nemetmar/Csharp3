@@ -10,6 +10,7 @@ using ToDoList.Domain.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
+[Collection("Tests")]
 public class GetTests
 {
 
