@@ -39,7 +39,11 @@ public class ToDoItemsController : ControllerBase
         {
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
-        return CreatedAtAction("Create", ToDoItemGetResponseDto.FromDomain(item));
+        /*
+        Toto som ti opravila na to, ako to mame v rieseni - vrati ti to okrem response aj cestu, kde najdes novovytvoreny objekt
+        V nasom pripade teda na ceste ReadById s parametrom {toDoItemId}.
+        */
+        return CreatedAtAction(nameof(ReadById), new { toDoItemId = item.ToDoItemId }, ToDoItemGetResponseDto.FromDomain(item));
     }
 
     [HttpGet]
@@ -47,9 +51,13 @@ public class ToDoItemsController : ControllerBase
     {
         try
         {
+            /*
+            Editor mi pri ukladani rovno odriadkuje, ak je if a return na jednom riadku.
+            Nie je chyba ani to mat na jednom riadku, ale osobne sa castejsie stretavam s touto verziu (alebo este s verziou, kde su {})
+            */
+            if (!context.ToDoItems.Any())
+                return NotFound();
 
-            if (!context.ToDoItems.Any()) return NotFound();
-            
             var dtoItems = new List<ToDoItemGetResponseDto>();
             foreach (var obj in context.ToDoItems)
             {
@@ -57,6 +65,10 @@ public class ToDoItemsController : ControllerBase
             }
 
             return Ok(dtoItems);
+            /*
+            Return moze vyzerat aj takto, aby si nemusela na zaciatku vytvarat pole a az potom don po jednom vkladat objekty:
+            return Ok(context.ToDoItems.Select(ToDoItemGetResponseDto.FromDomain).ToList());
+            */
         }
         catch (Exception ex)
         {
@@ -72,7 +84,8 @@ public class ToDoItemsController : ControllerBase
         {
             var item = context.ToDoItems.Find(toDoItemId);
 
-            if (item == null) return NotFound();
+            if (item == null)
+                return NotFound();
 
             return Ok(ToDoItemGetResponseDto.FromDomain(item));
         }
@@ -88,7 +101,8 @@ public class ToDoItemsController : ControllerBase
         try
         {
             var itemToUpdate = context.ToDoItems.Find(toDoItemId);
-            if(itemToUpdate is null) return NotFound();
+            if (itemToUpdate is null)
+                return NotFound();
 
             itemToUpdate.Name = request.Name;
             itemToUpdate.Description = request.Description;
@@ -111,7 +125,8 @@ public class ToDoItemsController : ControllerBase
         {
             var obj = context.ToDoItems.Find(toDoItemId);
 
-            if(obj is null) return NotFound();
+            if (obj is null)
+                return NotFound();
 
             context.ToDoItems.Remove(obj);
             context.SaveChanges();
