@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Domain.DTOs;
 using ToDoList.Domain.Models;
 using ToDoList.Persistence;
+using ToDoList.Persistence.Repositories;
 
 namespace ToDoList.WebApi;
 
@@ -17,12 +19,15 @@ public class ToDoItemsController : ControllerBase
 {
     public static List<ToDoItem> items = [];
 
-    private readonly ToDoItemsContext context;
+    private readonly IRepository<ToDoItem> repository;
 
-    public ToDoItemsController(ToDoItemsContext context)
+
+    public ToDoItemsController(IRepository<ToDoItem> repository)
     {
-        this.context = context;
+        this.repository = repository;
     }
+
+
 
 
 
@@ -32,8 +37,7 @@ public class ToDoItemsController : ControllerBase
         var item = request.ToDomain();
         try
         {
-            context.ToDoItems.Add(item);
-            context.SaveChanges();
+            repository.Create(item);
         }
         catch (Exception ex)
         {
@@ -47,11 +51,11 @@ public class ToDoItemsController : ControllerBase
     {
         try
         {
+            var repositoryItems = repository.Read();
+            if (!repositoryItems.Any()) return NotFound();
 
-            if (!context.ToDoItems.Any()) return NotFound();
-            
             var dtoItems = new List<ToDoItemGetResponseDto>();
-            foreach (var obj in context.ToDoItems)
+            foreach (var obj in repositoryItems)
             {
                 dtoItems.Add(ToDoItemGetResponseDto.FromDomain(obj));
             }
@@ -70,7 +74,7 @@ public class ToDoItemsController : ControllerBase
 
         try
         {
-            var item = context.ToDoItems.Find(toDoItemId);
+            var item = repository.ReadById(toDoItemId);
 
             if (item == null) return NotFound();
 
@@ -87,15 +91,8 @@ public class ToDoItemsController : ControllerBase
     {
         try
         {
-            var itemToUpdate = context.ToDoItems.Find(toDoItemId);
-            if(itemToUpdate is null) return NotFound();
-
-            itemToUpdate.Name = request.Name;
-            itemToUpdate.Description = request.Description;
-            itemToUpdate.IsCompleted = request.IsCompleted;
-
-            context.SaveChanges();
-
+            if (!repository.IdExists(toDoItemId)) return NotFound();
+            repository.UpdateById(toDoItemId, request.ToDomain());
         }
         catch (Exception ex)
         {
@@ -109,12 +106,8 @@ public class ToDoItemsController : ControllerBase
     {
         try
         {
-            var obj = context.ToDoItems.Find(toDoItemId);
-
-            if(obj is null) return NotFound();
-
-            context.ToDoItems.Remove(obj);
-            context.SaveChanges();
+            if (!repository.IdExists(toDoItemId)) return NotFound();
+            repository.DeleteById(toDoItemId);
 
         }
         catch (Exception ex)
