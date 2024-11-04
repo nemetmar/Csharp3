@@ -43,7 +43,7 @@ public class ToDoItemsController : ControllerBase
         {
             return Problem(ex.Message, null, StatusCodes.Status500InternalServerError);
         }
-        return CreatedAtAction("Create", ToDoItemGetResponseDto.FromDomain(item));
+        return CreatedAtAction(nameof(ReadById), new { toDoItemId = item.ToDoItemId }, ToDoItemGetResponseDto.FromDomain(item));
     }
 
     [HttpGet]
@@ -52,15 +52,10 @@ public class ToDoItemsController : ControllerBase
         try
         {
             var repositoryItems = repository.Read();
-            if (!repositoryItems.Any()) return NotFound();
+            if (repositoryItems.Count == 0)
+                return NotFound();
 
-            var dtoItems = new List<ToDoItemGetResponseDto>();
-            foreach (var obj in repositoryItems)
-            {
-                dtoItems.Add(ToDoItemGetResponseDto.FromDomain(obj));
-            }
-
-            return Ok(dtoItems);
+            return Ok(repositoryItems.Select(ToDoItemGetResponseDto.FromDomain).ToList());
         }
         catch (Exception ex)
         {
@@ -76,7 +71,8 @@ public class ToDoItemsController : ControllerBase
         {
             var item = repository.ReadById(toDoItemId);
 
-            if (item == null) return NotFound();
+            if (item == null)
+                return NotFound();
 
             return Ok(ToDoItemGetResponseDto.FromDomain(item));
         }
@@ -91,7 +87,8 @@ public class ToDoItemsController : ControllerBase
     {
         try
         {
-            if (!repository.IdExists(toDoItemId)) return NotFound();
+            if (!repository.IdExists(toDoItemId))
+                return NotFound();
             repository.UpdateById(toDoItemId, request.ToDomain());
         }
         catch (Exception ex)
@@ -106,7 +103,8 @@ public class ToDoItemsController : ControllerBase
     {
         try
         {
-            if (!repository.IdExists(toDoItemId)) return NotFound();
+            if (!repository.IdExists(toDoItemId))
+                return NotFound();
             repository.DeleteById(toDoItemId);
 
         }
