@@ -28,5 +28,15 @@ namespace ToDoList.Persistence.Repositories
         Na druhou stranu proč vracet item v put a delete, když to nebylo v zadání
         Na třetí stranu, v zadání to sice nebylo, ale mohl by přijít změnový požadavek a pak je asi lepší mít iRepository obecný a upravovat jen controller?
         */
+
+        /*
+        Je pravda ze IdExists by som uplne v IRepository necakala, nebyva to klasicky metodou IRepository.
+        Skor by som si upravila Update a Delete tak, aby som vedela, ci vobec nieco tieto metody modifikovali, bez nejakej pomocnej metody IdExists.
+        Ta prakticky len vola to iste co ReadById, akurat vracia bool podla toho, ci sa nieco naslo alebo nie.
+        Dalsi problem tohto vidim v tom ze Update a Delete uz nemaju validaciu na to, ci ten item existuje a rovno robia zmeny. Programator si teda vzdy musi pamatat, ze s Update a Delete musi volat aj IdExists, co su zbytocne dve volania namiesto jedneho, zaroven ak zabudne pouzit IdExists tak sa to cele pokazi (a chyby sa stavaju casto v takychto pripadoch :)
+        V oboch IdExists a Update/Delete zaroven volas Find, co su len dalsie vyssie naklady na databazu (v pripade, ze prvok existuje, tak vlastne 2krat pristupujes do databazy aby si si ho precitala)
+        Odporucam bud to teda prepisat do verzie, aku dali lektori do template - ak sa nenajde item, vyhodi sa specificka vynimka, ktora sa potom odchyti v controlleri.
+        Alebo este je jedna moznost, ktoru som aj videla v praxi, a to vracat pri Update a Delete bool -> ak sa nenajde item, vrati sa false, inak sa modifikuje a vrati sa true.
+        */
     }
 }
