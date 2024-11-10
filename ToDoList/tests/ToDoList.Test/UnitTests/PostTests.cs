@@ -11,13 +11,12 @@ using Microsoft.AspNetCore.Http;
 public class PostTests_Unit
 {
     [Fact]
-    public void Post_Item_CreatesItem()
+    public void Post_CreateValidRequest_ReturnsCreatedAtAction()
     {
         // Arrange
         var repositoryMock = Substitute.For<IRepository<ToDoItem>>();
         var controller = new ToDoItemsController(repositoryMock);
         var item = new ToDoItemCreateRequestDto("Test name", "Test description", false);
-
 
         //Act
         var result = controller.Create(item);
@@ -27,18 +26,17 @@ public class PostTests_Unit
         //Assert
         Assert.True(result is CreatedAtActionResult);
         Assert.IsType<CreatedAtActionResult>(result);
-
+        repositoryMock.Received(1).Create(Arg.Any<ToDoItem>());
         Assert.NotNull(value);
 
         Assert.Equal(item.Description, value.Description);
         Assert.Equal(item.IsCompleted, value.IsCompleted);
         Assert.Equal(item.Name, value.Name);
-        //Assert.Equal(ToDoItemsController.items.Max(i => i.ToDoItemId), value.ToDoItemId);
     }
 
 
     [Fact]
-    public void Post_UnhandledException_Returns500()
+    public void Post_CreateUnhandledException_ReturnsInternalServerError()
     {
         // Arrange
         var repositoryMock = Substitute.For<IRepository<ToDoItem>>();
@@ -53,6 +51,7 @@ public class PostTests_Unit
         //Assert
         Assert.True(result is ObjectResult);
         Assert.IsType<ObjectResult>(result);
+        repositoryMock.Received(1).Create(Arg.Any<ToDoItem>());
         Assert.Equivalent(new StatusCodeResult(StatusCodes.Status500InternalServerError), result);
     }
 

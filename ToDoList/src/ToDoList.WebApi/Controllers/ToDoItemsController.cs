@@ -52,7 +52,7 @@ public class ToDoItemsController : ControllerBase
         try
         {
             var repositoryItems = repository.Read();
-            if (repositoryItems.Count == 0)
+            if (repositoryItems is null || !repositoryItems.Any())
                 return NotFound();
 
             return Ok(repositoryItems.Select(ToDoItemGetResponseDto.FromDomain).ToList());
@@ -87,8 +87,11 @@ public class ToDoItemsController : ControllerBase
     {
         try
         {
-            if (!repository.IdExists(toDoItemId))
-                return NotFound();
+            var itemToUpdate = repository.ReadById(toDoItemId);
+            if (itemToUpdate is null)
+            {
+                return NotFound(); //404
+            }
             repository.UpdateById(toDoItemId, request.ToDomain());
         }
         catch (Exception ex)
@@ -103,8 +106,11 @@ public class ToDoItemsController : ControllerBase
     {
         try
         {
-            if (!repository.IdExists(toDoItemId))
-                return NotFound();
+            var itemToDelete = repository.ReadById(toDoItemId);
+            if (itemToDelete is null)
+            {
+                return NotFound(); //404
+            }
             repository.DeleteById(toDoItemId);
 
         }

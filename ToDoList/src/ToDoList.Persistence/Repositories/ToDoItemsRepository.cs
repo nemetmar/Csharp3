@@ -28,23 +28,14 @@ namespace ToDoList.Persistence.Repositories
             return context.ToDoItems.Find(id);
         }
 
-        public List<ToDoItem> Read()
+        public IEnumerable<ToDoItem> Read()
         {
             return context.ToDoItems.ToList();
         }
 
-        public bool IdExists(int id)
-        {
-            if(context.ToDoItems.Find(id) is null)
-            {
-                return false;
-            }
-            return true;
-        }
-
         public void UpdateById(int id, ToDoItem item)
         {
-            var itemToUpdate = context.ToDoItems.Find(id);
+            var itemToUpdate = context.ToDoItems.Find(id) ?? throw new ArgumentOutOfRangeException($"ToDo item with ID {item.ToDoItemId} not found.");
 
             itemToUpdate.Name = item.Name;
             itemToUpdate.Description = item.Description;
@@ -55,7 +46,8 @@ namespace ToDoList.Persistence.Repositories
 
         public void DeleteById(int id)
         {
-            context.ToDoItems.Remove(context.ToDoItems.Find(id));
+            var item = context.ToDoItems.Find(id) ?? throw new ArgumentOutOfRangeException($"ToDo item with ID {id} not found.");
+            context.ToDoItems.Remove(item);
             context.SaveChanges();
         }
     }
