@@ -1,0 +1,27 @@
+﻿@page "/ahojSvete"
+@rendermode InteractiveServer
+
+<PageTitle>New world</PageTitle>
+
+<h1>@ahojSvete</h1>
+
+Vítej v mojí aplikaci.
+<br>
+<button @onclick="Increment">Čudlík</button>
+
+<br>
+
+Hodnota počítadla: @counter;
+
+@code
+{
+    string ahojSvete = "Ahoj světe ještě jednou!";
+
+    int counter = 0;
+
+    public void Increment()
+    {
+        counter++;
+    }
+
+}
