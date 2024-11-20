@@ -14,6 +14,7 @@
             <th @onclick="SortItemsByName">Name <span class="sort-arrows">&#9650; &#9660;</span></th>
             <th @onclick="SortItemsByIsCompleted">Is completed <span class="sort-arrows">&#9650; &#9660;</span></th>
             <th>Description</th>
+            <th>Category</th>
         </tr>
     </thead>
 
@@ -32,6 +33,7 @@
                     <td>@toDoItem.Name</td>
                     <td>@(toDoItem.IsCompleted ? "Yes" : "No")</td>
                     <td>@toDoItem.Description</td>
+                    <td>@toDoItem.Category</td>
                 </tr>
             </tbody>
         }

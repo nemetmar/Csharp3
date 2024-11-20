@@ -22,7 +22,8 @@ namespace ToDoList.Frontend.Clients
                 ToDoItemId = dto.ToDoItemId,
                 Name = dto.Name,
                 Description = dto.Description,
-                IsCompleted = dto.IsCompleted
+                IsCompleted = dto.IsCompleted,
+                Category= dto.Category
 
             }).ToList();
             return toDoItemsView;
