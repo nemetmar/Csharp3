@@ -1,4 +1,7 @@
-﻿@rendermode InteractiveServer
+﻿@using ToDoList.Frontend.Clients
+@using ToDoList.Frontend.Views
+@inject IToDoItemsClient ToDoItemsClient
+@rendermode InteractiveServer
 
 <h1>Dashboard</h1>
 
@@ -13,35 +16,38 @@
             <th>Description</th>
         </tr>
     </thead>
-    @foreach(var toDoItem in toDoItems)
+
+    @if(toDoItems is null)
     {
-        <tbody>
-            <tr>
-                <td>@toDoItem.ToDoItemId</td>
-                <td>@toDoItem.Name</td>
-                <td>@(toDoItem.IsCompleted ? "Yes" : "No")</td>
-                <td>@toDoItem.Description</td>
-            </tr>
-        </tbody>
+        <p>Načítám.....</p>
     }
+
+    @if(toDoItems is not null)
+    {
+        @foreach(var toDoItem in toDoItems)
+        {
+            <tbody>
+                <tr>
+                    <td>@toDoItem.ToDoItemId</td>
+                    <td>@toDoItem.Name</td>
+                    <td>@(toDoItem.IsCompleted ? "Yes" : "No")</td>
+                    <td>@toDoItem.Description</td>
+                </tr>
+            </tbody>
+        }
+    }
+
 </table>
 
 
 @code
 {
-    private List<ToDoItemView> toDoItems = [
-        new ToDoItemView() {ToDoItemId = 1, Name = "Udělat ukol Czechitas", IsCompleted = false},
-        new ToDoItemView() {ToDoItemId = 2, Name = "Czechitas Udělat nepovinny ukol Czechitas", IsCompleted = false, Description = "Trololo Ayoyo Wololo!"},
-        new ToDoItemView() {ToDoItemId = 3, Name = "Hehe Udělat ukol Czechitas", IsCompleted = true},
-    ];
-    public class ToDoItemView
+    protected override async Task OnInitializedAsync()
     {
-
-        public int ToDoItemId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public bool IsCompleted { get; set; }
+        toDoItems = await ToDoItemsClient.ReadItemsAsync();
     }
+    private List<ToDoItemView>? toDoItems;
+
 
      private string sortOrderId = "desc";
      private string sortOrderName = "desc";
@@ -67,11 +73,11 @@
     {
         if (sortOrder == "asc")
         {
-            toDoItems = toDoItems.OrderBy(keySelector).ToList();
+            toDoItems = toDoItems?.OrderBy(keySelector).ToList();
         }
         else
         {
-            toDoItems = toDoItems.OrderByDescending(keySelector).ToList();
+            toDoItems = toDoItems?.OrderByDescending(keySelector).ToList();
         }
     }
 }

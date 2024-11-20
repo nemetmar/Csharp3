@@ -16,7 +16,7 @@ public class PostTests_Unit
         // Arrange
         var repositoryMock = Substitute.For<IRepository<ToDoItem>>();
         var controller = new ToDoItemsController(repositoryMock);
-        var item = new ToDoItemCreateRequestDto("Test name", "Test description", false);
+        var item = new ToDoItemCreateRequestDto("Test name", "Test description", false, "Homework");
 
         //Act
         var result = controller.Create(item);
@@ -41,7 +41,7 @@ public class PostTests_Unit
         // Arrange
         var repositoryMock = Substitute.For<IRepository<ToDoItem>>();
         var controller = new ToDoItemsController(repositoryMock);
-        var item = new ToDoItemCreateRequestDto("Test name", "Test description", false);
+        var item = new ToDoItemCreateRequestDto("Test name", "Test description", false, "Homework");
 
         repositoryMock.When(r => r.Create(Arg.Any<ToDoItem>())).Do(r => throw new Exception());
 

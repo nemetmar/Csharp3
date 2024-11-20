@@ -24,7 +24,7 @@ public class GetTests_Unit
         //repositoryMock.Received().Read();     //kontrolujeme zavolání metody
         //repositoryMock.Read().ReturnsNull();   //nastavuje return null
 
-        repositoryMock.Read().Returns([new ToDoItem { Name = "Test name", Description = "Test description", IsCompleted = false }]);
+        repositoryMock.Read().Returns([new ToDoItem { Name = "Test name", Description = "Test description", IsCompleted = false, Category = "Homework" }]);
 
         //Act
         var result = controller.Read();

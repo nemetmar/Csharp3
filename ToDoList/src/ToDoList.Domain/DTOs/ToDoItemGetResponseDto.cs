@@ -11,6 +11,7 @@ public class ToDoItemGetResponseDto
         public string Description { get; set;}
 
         public bool IsCompleted { get; set;}
+        public string? Category { get; set;}
 
     public static ToDoItemGetResponseDto FromDomain(ToDoItem item)
     {
@@ -19,7 +20,8 @@ public class ToDoItemGetResponseDto
             ToDoItemId = item.ToDoItemId,
             Name = item.Name,
             Description = item.Description,
-            IsCompleted = item.IsCompleted
+            IsCompleted = item.IsCompleted,
+            Category = item.Category
         };
     }
 }

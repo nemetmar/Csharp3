@@ -17,7 +17,7 @@ public class GetByIdTests_Unit
         //Arrange
         var repositoryMock = Substitute.For<IRepository<ToDoItem>>();
         var controller = new ToDoItemsController(repositoryMock);
-        repositoryMock.ReadById(Arg.Any<int>()).Returns(new ToDoItem { Name = "Test name", Description = "Test description", IsCompleted = false });
+        repositoryMock.ReadById(Arg.Any<int>()).Returns(new ToDoItem { Name = "Test name", Description = "Test description", IsCompleted = false, Category = "Homework" });
         var someId = 1;
 
         //Act

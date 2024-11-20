@@ -18,9 +18,9 @@ public class PutTests_Unit
         //Arrange
         var repositoryMock = Substitute.For<IRepository<ToDoItem>>();
         var controller = new ToDoItemsController(repositoryMock);
-        repositoryMock.ReadById(Arg.Any<int>()).Returns(new ToDoItem { Name = "Test name", Description = "Test description", IsCompleted = false });
+        repositoryMock.ReadById(Arg.Any<int>()).Returns(new ToDoItem { Name = "Test name", Description = "Test description", IsCompleted = false, Category = "Homework" });
         var someId = 1;
-        var item = new ToDoItemUpdateRequestDto("Updated name", "Updated description", false);
+        var item = new ToDoItemUpdateRequestDto("Updated name", "Updated description", false, "Homework");
 
         //Act
         var result = controller.UpdateById(someId, item);
@@ -29,7 +29,7 @@ public class PutTests_Unit
         repositoryMock.Received(1).ReadById(someId);
         //Tady jsem měla problém, že mi test nebral item.ToDomain() v argumentu, řešení mi opět poradila AI, tak snad je korektní
         //přišlo mi, že Arg.Any<ToDoItem>(), které máme v PostTests netestuje úplně to, že se jedná o stejné hodnoty
-        repositoryMock.Received(1).UpdateById(someId, Arg.Is<ToDoItem>(x => x.Name == item.Name && x.Description == item.Description && x.IsCompleted == item.IsCompleted));
+        repositoryMock.Received(1).UpdateById(someId, Arg.Is<ToDoItem>(x => x.Name == item.Name && x.Description == item.Description && x.IsCompleted == item.IsCompleted && x.Category == item.Category));
         Assert.IsType<NoContentResult>(result);
     }
 
@@ -41,7 +41,7 @@ public class PutTests_Unit
         var controller = new ToDoItemsController(repositoryMock);
         repositoryMock.ReadById(Arg.Any<int>()).ReturnsNull();
         var someId = 1;
-        var item = new ToDoItemUpdateRequestDto("Updated name", "Updated description", false);
+        var item = new ToDoItemUpdateRequestDto("Updated name", "Updated description", false, "Homework");
 
         //Act
         var result = controller.UpdateById(someId, item);
@@ -60,7 +60,7 @@ public class PutTests_Unit
         var controller = new ToDoItemsController(repositoryMock);
         repositoryMock.ReadById(Arg.Any<int>()).Throws(new Exception());
         var someId = 1;
-        var item = new ToDoItemUpdateRequestDto("Updated name", "Updated description", false);
+        var item = new ToDoItemUpdateRequestDto("Updated name", "Updated description", false, "Homework");
 
         //Act
         var result = controller.UpdateById(someId, item);
@@ -78,17 +78,17 @@ public class PutTests_Unit
         // Arrange
         var repositoryMock = Substitute.For<IRepository<ToDoItem>>();
         var controller = new ToDoItemsController(repositoryMock);
-        repositoryMock.ReadById(Arg.Any<int>()).Returns(new ToDoItem { Name = "Test name", Description = "Test description", IsCompleted = false });
+        repositoryMock.ReadById(Arg.Any<int>()).Returns(new ToDoItem { Name = "Test name", Description = "Test description", IsCompleted = false, Category = "Homework" });
         repositoryMock.When(repo => repo.UpdateById(Arg.Any<int>(), Arg.Any<ToDoItem>())).Do(call => { throw new Exception(); });
         var someId = 1;
-        var item = new ToDoItemUpdateRequestDto("Updated name", "Updated description", false);
+        var item = new ToDoItemUpdateRequestDto("Updated name", "Updated description", false, "Homework");
 
         // Act
         var result = controller.UpdateById(someId, item);
         // Assert
 
         repositoryMock.Received(1).ReadById(someId);
-        repositoryMock.Received(1).UpdateById(someId, Arg.Is<ToDoItem>(x => x.Name == item.Name && x.Description == item.Description && x.IsCompleted == item.IsCompleted));
+        repositoryMock.Received(1).UpdateById(someId, Arg.Is<ToDoItem>(x => x.Name == item.Name && x.Description == item.Description && x.IsCompleted == item.IsCompleted && x.Category == item.Category));
         Assert.IsType<ObjectResult>(result);
         Assert.Equivalent(new StatusCodeResult(StatusCodes.Status500InternalServerError), result);
     }

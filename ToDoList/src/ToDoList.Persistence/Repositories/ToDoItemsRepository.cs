@@ -40,6 +40,7 @@ namespace ToDoList.Persistence.Repositories
             itemToUpdate.Name = item.Name;
             itemToUpdate.Description = item.Description;
             itemToUpdate.IsCompleted = item.IsCompleted;
+            itemToUpdate.Category = item.Category;
 
             context.SaveChanges();
         }
