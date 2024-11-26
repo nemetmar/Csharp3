@@ -19,4 +19,18 @@ namespace ToDoList.Persistence.Repositories
         public void DeleteById(int id);
 
     }
+
+    public interface IRepositoryAsync<T> where T : class
+    {
+
+        public Task CreateAsync(T item);
+
+        public Task<T> ReadByIdAsync(int id);
+
+        public Task<IEnumerable<T>> ReadAsync();
+
+        public Task UpdateByIdAsync(int id, T item);
+
+        public Task DeleteByIdAsync(int id);
+    }
 }

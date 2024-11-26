@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ToDoList.Domain.Models;
 
 namespace ToDoList.Persistence.Repositories
 {
-    public class ToDoItemsRepository : IRepository<ToDoItem>
+    public class ToDoItemsRepository : IRepositoryAsync<ToDoItem>
     {
 
         private readonly ToDoItemsContext context;
@@ -17,39 +18,39 @@ namespace ToDoList.Persistence.Repositories
         }
 
 
-        public void Create(ToDoItem item)
+        public async Task CreateAsync(ToDoItem item)
         {
-            context.ToDoItems.Add(item);
-            context.SaveChanges();
+            await context.ToDoItems.AddAsync(item);
+            await context.SaveChangesAsync();
         }
 
-        public ToDoItem ReadById(int id)
+        public async Task<ToDoItem> ReadByIdAsync(int id)
         {
-            return context.ToDoItems.Find(id);
+            return await context.ToDoItems.FindAsync(id);
         }
 
-        public IEnumerable<ToDoItem> Read()
+        public async Task<IEnumerable<ToDoItem>> ReadAsync()
         {
-            return context.ToDoItems.ToList();
+            return await context.ToDoItems.ToListAsync();
         }
 
-        public void UpdateById(int id, ToDoItem item)
+        public async Task UpdateByIdAsync(int id, ToDoItem item)
         {
-            var itemToUpdate = context.ToDoItems.Find(id) ?? throw new ArgumentOutOfRangeException($"ToDo item with ID {item.ToDoItemId} not found.");
+            var itemToUpdate = await context.ToDoItems.FindAsync(id) ?? throw new ArgumentOutOfRangeException($"ToDo item with ID {item.ToDoItemId} not found.");
 
             itemToUpdate.Name = item.Name;
             itemToUpdate.Description = item.Description;
             itemToUpdate.IsCompleted = item.IsCompleted;
             itemToUpdate.Category = item.Category;
 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void DeleteById(int id)
+        public async Task DeleteByIdAsync(int id)
         {
-            var item = context.ToDoItems.Find(id) ?? throw new ArgumentOutOfRangeException($"ToDo item with ID {id} not found.");
+            var item = await context.ToDoItems.FindAsync(id) ?? throw new ArgumentOutOfRangeException($"ToDo item with ID {id} not found.");
             context.ToDoItems.Remove(item);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }
