@@ -6,7 +6,7 @@ using ToDoList.Domain.Models;
 
 namespace ToDoList.Domain.DTOs
 {
-    public record ToDoItemUpdateRequestDto(string Name, string Description, bool IsCompleted, string Category)
+    public record ToDoItemUpdateRequestDto(string Name, string Description, bool IsCompleted, string? Category)
     {
         public ToDoItem ToDomain()
         {
