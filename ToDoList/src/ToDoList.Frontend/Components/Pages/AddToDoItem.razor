@@ -1,23 +1,24 @@
 ﻿@using ToDoList.Frontend.Views
 @using ToDoList.Frontend.Clients
 
-@page "/editToDoItem/{ItemId:int}"
+@page "/addToDoItem"
 @inject NavigationManager NavigationManager
 @inject IToDoItemsClient ToDoItemsClient
 @rendermode InteractiveServer
 
-<PageTitle>Edit ToDoItem</PageTitle>
+<PageTitle>New ToDoItem</PageTitle>
 
 
-@if (ToDoItem is not null)
 
-{
-    <h1>Edit ToDoItem id=@ToDoItem.ToDoItemId</h1>
-    <EditForm Model="ToDoItem" FormName="EditToDoItem" OnSubmit="Submit" class="form-horizontal">
+    <h1>New ToDoItem</h1>
+    <EditForm Model="ToDoItem" OnValidSubmit="Submit" class="form-horizontal">
+         <DataAnnotationsValidator />
+         <ValidationSummary />
         <div class="form-group row mb-3">
             <label for="Name" class="col-sm-2 col-form-label">Name</label>
             <div class="col-sm-10">
                 <InputText id="Name" class="form-control" @bind-Value="ToDoItem.Name" />
+                <ValidationMessage For="@(() => ToDoItem.Name)" />
             </div>
         </div>
 
@@ -29,16 +30,10 @@
         </div>
 
         <div class="form-group row mb-3">
-            <label for="IsCompleted" class="col-sm-2 col-form-label">IsCompleted</label>
-            <div class="col-sm-10">
-                <InputCheckbox id="IsCompleted" class="form-check-input" @bind-Value="ToDoItem.IsCompleted" />
-            </div>
-        </div>
-
-        <div class="form-group row mb-3">
             <label for="Category" class="col-sm-2 col-form-label">Category</label>
             <div class="col-sm-10">
                 <InputText id="Category" class="form-control" @bind-Value="ToDoItem.Category" />
+                <ValidationMessage For="@(() => ToDoItem.Category)" />
             </div>
         </div>
 
@@ -49,25 +44,13 @@
         </div>
     </EditForm>
 
-}
 
 @code
 {
-
-    protected override async Task OnInitializedAsync()
+    private ToDoItemView ToDoItem { get; set; } = new ToDoItemView();
+    public async Task Submit()
     {
-        ToDoItem = await ToDoItemsClient.ReadItemByIdAsync(ItemId);
-    }
-
-    [Parameter]
-    public int ItemId {get; set;}
-
-    [SupplyParameterFromForm]
-    public ToDoItemView ToDoItem {get; set;}
-
-    public async void Submit()
-    {
-        await ToDoItemsClient.UpdateItemAsync(ToDoItem);
+        await ToDoItemsClient.CreateItemAsync(ToDoItem);
         NavigationManager.NavigateTo("/");
     }
 }

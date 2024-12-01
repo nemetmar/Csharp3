@@ -44,6 +44,9 @@
                 </tr>
             </tbody>
         }
+        <br>
+        <button class="btn btn-success" @onclick="() => AddItem()">New ToDoItem</button>
+
     }
 
 </table>
@@ -100,6 +103,11 @@
     public void EditItem(ToDoItemView toDoItemView)
     {
         NavigationManager.NavigateTo($"editToDoItem/{toDoItemView.ToDoItemId}");
+    }
+
+    public void AddItem()
+    {
+        NavigationManager.NavigateTo($"addToDoItem");
     }
 
     public async void DeleteItem(ToDoItemView toDoItemView)

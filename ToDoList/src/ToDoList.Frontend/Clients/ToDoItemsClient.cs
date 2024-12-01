@@ -58,7 +58,12 @@ namespace ToDoList.Frontend.Clients
 
         public async Task CreateItemAsync(ToDoItemView itemView)
         {
-            var itemRequest = new ToDoItemCreateRequestDto(itemView.Name, itemView.Description, itemView.IsCompleted, itemView.Category);
+            var itemRequest = new ToDoItemCreateRequestDto(
+                itemView.Name,
+                string.IsNullOrEmpty(itemView.Description) ? string.Empty : itemView.Description,
+                itemView.IsCompleted, 
+                itemView.Category
+                );
             try
             {
                 var response = await httpClient.PostAsJsonAsync("api/ToDoItems", itemRequest);
